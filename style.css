@@ -1,0 +1,115 @@
+html {
+    box-sizing: border-box;
+    height: 100%; 
+    scroll-behavior: smooth;
+}
+
+*,*::after, *::before {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: "Itim", cursive;
+}
+
+h1 {
+    font-size: 20px;
+    text-align: center;
+}
+
+.btn_search {
+    background: rgba(254, 114, 91, 1) url('../project 2/loupe.png') no-repeat center ;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+}
+
+.search_cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input {
+    height: 30px;
+    width: 210px;
+    background-color: rgba(252, 219, 214, 1);
+    border: none;
+    border-radius: 20px; 
+    padding-left: 20px;
+}
+
+input::placeholder {
+    transition: opacity 0.3s;
+  }
+
+.input:focus-visible {
+    outline: none;
+    
+}
+
+.input:focus::placeholder { 
+    opacity: 0; 
+}
+
+.btn_search::before {
+    content: "";
+    background-color: rgba(252, 219, 214, 1);
+    width: 40px;
+    height: 30px;
+    position: absolute;
+    transform: translate(5px, -15px);
+    z-index: -1;
+}
+
+datalist {
+    background-color: rgba(131, 123, 121, 1);
+    color: white;
+}
+
+.suggest_cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(131, 123, 121, 1);
+    color: white;
+    max-width: 230px;
+    margin: 10px auto 0 auto;
+    border-radius: 20px;
+}
+
+.suggest_cont::before{
+    content: "";
+    font-size: 0px; line-height: 0%; width: 0px;
+    border-top: 20px solid rgba(131, 123, 121, 1);
+    border-right: 20px solid transparent;
+    transform: translateY(-10px) rotate(45deg);
+    position: absolute;
+}
+
+.suggest_item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 230px;
+    text-align: center;
+}
+
+.suggest_item:hover {
+    background-color: rgb(151, 142, 140);
+    border-radius: 20px;
+}
+
+.like_card {
+    height: 50px;
+    width: 200px;
+    background-color: rgba(252, 219, 214, 1);
+    border-radius: 20px;
+    padding-left: 20px;
+}
+
+.like {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
