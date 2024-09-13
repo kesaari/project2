@@ -1,7 +1,7 @@
-const input = document.querySelector(".input");
-const datalist = document.querySelector('.suggest_cont');
-const like = document.querySelector('.like');
-let likeData = JSON.parse(localStorage.getItem('likeData')) || [];
+let input = document.querySelector(".input");
+let datalist = document.querySelector('.suggest_cont');
+let like = document.querySelector('.like');
+let likeData = JSON.parse(localStorage.getItem('like'));
 
 function closeSuggest() {
     datalist.innerHTML = ' '
@@ -29,14 +29,7 @@ function fixToLike(repo) {
     if (!likeData.find(el => el.id === repo.id)) {
         likeData.push(repo);
         localStorage.setItem('like', JSON.stringify(likeData));
-        let likeCard = createItem('div', 'like_card');
-        likeCard.innerHTML = `<div class="titleText">${repo.name}</div>
-                              <div class="text">Владелец: ${repo.owner.login}</div>
-                              <div class="text">Рейтинг: ${repo.stargazers_count}</div> `;
-        let deleteBtn = createItem('button', 'delete_btn');
-        deleteBtn.onclick = () => deleteLike(repo.name, deleteBtn.parentNode)
-        likeCard.append(deleteBtn);
-        like.append(likeCard);
+        renderLike(repo);
         closeSuggest();
     }
 console.log(localStorage);
@@ -56,26 +49,6 @@ input.addEventListener('keydown', (event) => {
         closeSuggest();
     }
 });
-
-// async function searchRepos() {
-//     if(input.value) {
-//     return await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`)
-//     .then(res => {
-//         if (res.ok) {
-//             res.json().then(res => {
-//                 res.items.forEach(repos => {
-//                     let suggest = createSuggest(repos.name)
-//                     reposStorage = Object.assign(repos);
-//                     getActive(suggest);
-//                     console.log(reposStorage)
-//                 });
-//                 });
-//             }
-//         })
-//     } else {
-//         datalist.innerHTML = ' ';
-//     }
-// }
 
 function createSuggest(repos) {
     repos.forEach(repo => {
@@ -108,3 +81,23 @@ async function searchRepos() {
     }
 }
 
+function renderLike(repo) {
+    let likeCard = createItem('div', 'like_card');
+        likeCard.innerHTML = `<div class="titleText">${repo.name}</div>
+                              <div class="text">Владелец: ${repo.owner.login}</div>
+                              <div class="text">Рейтинг: ${repo.stargazers_count}</div> `;
+        let deleteBtn = createItem('button', 'delete_btn');
+        deleteBtn.onclick = () => deleteLike(repo.name, deleteBtn.parentNode)
+        likeCard.append(deleteBtn);
+        like.append(likeCard);
+}
+
+function updateLike() {
+    
+    likeData.forEach(repo => {
+        renderLike(repo);
+    })
+}
+
+updateLike();
+console.log(likeData)

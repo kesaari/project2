@@ -23,6 +23,7 @@ h1 {
     height: 40px;
     border-radius: 50px;
     border: none;
+
 }
 
 .search_cont {
@@ -74,17 +75,16 @@ datalist {
     align-items: center;
     background-color: rgba(131, 123, 121, 1);
     color: white;
-    max-width: 230px;
-    position: absolute;
-    transform: translateX(225px) translateY(-7px);
+    max-width: 220px;
     border-radius: 0 0 20px 20px;
     z-index: 1;
+    margin: -5px auto;
 }
 
 .suggest_item {
     padding-top: 5px;
     padding-bottom: 5px;
-    width: 205px;
+    width: 200px;
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -131,12 +131,13 @@ datalist {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    transform: translateY(100px);
 }
 
 .delete_btn {
     position: absolute;
     transform: translateX(155px) translateY(-35px);
-    background: url('../project 2/close.png') no-repeat center ;
+    background: url('../project2/close.png') no-repeat center ;
     height: 15px;
     width: 15px;
     border: none;
