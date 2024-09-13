@@ -25,14 +25,30 @@ function fixToLike(element) {
 // );};
 }
 
-function addToFavorites(repo) {
-    if (!likeData.find(fav => fav.id === repo.id)) {
+function fixToLike(repo) {
+    if (!likeData.find(el => el.id === repo.id)) {
         likeData.push(repo);
         localStorage.setItem('like', JSON.stringify(likeData));
+        let likeCard = createItem('div', 'like_card');
+        likeCard.innerHTML = `<div class="titleText">${repo.name}</div>
+                              <div class="text">Владелец: ${repo.owner.login}</div>
+                              <div class="text">Рейтинг: ${repo.stargazers_count}</div> `;
+        let deleteBtn = createItem('button', 'delete_btn');
+        deleteBtn.onclick = () => deleteLike(repo.name, deleteBtn.parentNode)
+        likeCard.append(deleteBtn);
+        like.append(likeCard);
+        closeSuggest();
     }
 console.log(localStorage);
 }
 
+function deleteLike(repo, card) {
+    likeData = likeData.filter(elem => elem.name !== repo);
+    localStorage.setItem('like', JSON.stringify(likeData));
+    let deleteItem = card;
+    deleteItem.remove();
+    console.log(deleteItem);
+}
 
 input.addEventListener('keyup', debounce(searchRepos.bind(this), 500));
 input.addEventListener('keydown', (event) => {
@@ -66,12 +82,12 @@ function createSuggest(repos) {
         let suggest_item = document.createElement('div');
         suggest_item.textContent = `${repo.name}`;
         suggest_item.classList.add('suggest_item');
+        let likeBtn = createItem('button', 'like_btn');
+        suggest_item.append(likeBtn);
         datalist.append(suggest_item);
-        suggest_item.onclick = () => addToFavorites(repo);
-
-        // suggest_item.onclick = function() {
-        //     fixToLike(repo)
-        // }
+        likeBtn.onclick = function() {
+            fixToLike(repo)
+        }
     })
 }
 

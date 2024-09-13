@@ -75,24 +75,22 @@ datalist {
     background-color: rgba(131, 123, 121, 1);
     color: white;
     max-width: 230px;
-    margin: 10px auto 0 auto;
-    border-radius: 20px;
-}
-
-.suggest_cont::before{
-    content: "";
-    font-size: 0px; line-height: 0%; width: 0px;
-    border-top: 20px solid rgba(131, 123, 121, 1);
-    border-right: 20px solid transparent;
-    transform: translateY(-10px) rotate(45deg);
     position: absolute;
+    transform: translateX(225px) translateY(-7px);
+    border-radius: 0 0 20px 20px;
+    z-index: 1;
 }
 
 .suggest_item {
     padding-top: 5px;
     padding-bottom: 5px;
-    width: 230px;
+    width: 205px;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-items: center;
 }
 
 .suggest_item:hover {
@@ -101,15 +99,45 @@ datalist {
 }
 
 .like_card {
-    height: 50px;
     width: 200px;
     background-color: rgba(252, 219, 214, 1);
     border-radius: 20px;
     padding-left: 20px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .like {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.like_btn {
+    background: url('../project 2/like.png') no-repeat center ;
+    height: 30px;
+    width: 30px;
+    border: none;
+    filter: grayscale(80%);
+}
+
+.like_btn:hover {
+    filter: none;
+}
+
+.like {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.delete_btn {
+    position: absolute;
+    transform: translateX(155px) translateY(-35px);
+    background: url('../project 2/close.png') no-repeat center ;
+    height: 15px;
+    width: 15px;
+    border: none;
 }
