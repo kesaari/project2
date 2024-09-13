@@ -52,6 +52,7 @@ input.addEventListener('keydown', (event) => {
 
 function createSuggest(repos) {
     repos.forEach(repo => {
+
         let suggest_item = document.createElement('div');
         suggest_item.textContent = `${repo.name}`;
         suggest_item.classList.add('suggest_item');
@@ -75,6 +76,7 @@ async function searchRepos() {
     if(input.value) {
         let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`);
         let reposList = await response.json();
+        closeSuggest();
         createSuggest(reposList.items);
     } else {
         closeSuggest();
