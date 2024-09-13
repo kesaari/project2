@@ -18,7 +18,7 @@ h1 {
 }
 
 .btn_search {
-    background: rgba(254, 114, 91, 1) url('../project 2/loupe.png') no-repeat center ;
+    background: rgba(254, 114, 91, 1) url('../project2/loupe.png') no-repeat center ;
     width: 40px;
     height: 40px;
     border-radius: 50px;
@@ -116,7 +116,7 @@ datalist {
 }
 
 .like_btn {
-    background: url('../project 2/like.png') no-repeat center ;
+    background: url('../project2/like.png') no-repeat center ;
     height: 30px;
     width: 30px;
     border: none;
