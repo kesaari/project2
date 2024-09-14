@@ -96,6 +96,7 @@ datalist {
 .suggest_item:hover {
     background-color: rgb(151, 142, 140);
     border-radius: 20px;
+    cursor: pointer;
 }
 
 .like_card {
@@ -125,6 +126,7 @@ datalist {
 
 .like_btn:hover {
     filter: none;
+    cursor: pointer;
 }
 
 .like {

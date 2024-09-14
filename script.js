@@ -4,6 +4,21 @@ let like = document.querySelector('.like');
 let likeData = JSON.parse(localStorage.getItem('like')) || [];
 let body = document.getElementsByTagName('body')
 
+function updateLike() {
+    
+    likeData.forEach(repo => {
+        renderLike(repo);
+    })
+}
+
+function createLoader() {
+    datalist.innerHTML = `<span class="loader"></span>`;
+}
+
+function notFound() {
+    datalist.innerHTML = `<span class="loader"></span>`;
+}
+
 function closeSuggest() {
     datalist.innerHTML = ' '
 }
@@ -84,6 +99,9 @@ async function searchRepos() {
         let reposList = await response.json();
         closeSuggest();
         createSuggest(reposList.items);
+        if (reposList.items.length === 0) {
+            datalist.innerHTML = `<div>Ничего не нашлось</div>`
+        }
     } else {
         closeSuggest();
     }
@@ -100,16 +118,4 @@ function renderLike(repo) {
         like.append(likeCard);
 }
 
-function updateLike() {
-    
-    likeData.forEach(repo => {
-        renderLike(repo);
-    })
-}
-
-function createLoader() {
-    datalist.innerHTML = `<span class="loader"></span>`;
-}
-
 updateLike();
-console.log(likeData)
