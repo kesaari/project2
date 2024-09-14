@@ -1,7 +1,8 @@
 let input = document.querySelector(".input");
 let datalist = document.querySelector('.suggest_cont');
 let like = document.querySelector('.like');
-let likeData = JSON.parse(localStorage.getItem('like'));
+let likeData = JSON.parse(localStorage.getItem('like')) || [];
+let body = document.getElementsByTagName('body')
 
 function closeSuggest() {
     datalist.innerHTML = ' '
@@ -42,8 +43,12 @@ function deleteLike(repo, card) {
     deleteItem.remove();
     console.log(deleteItem);
 }
-
-input.addEventListener('keyup', debounce(searchRepos.bind(this), 500));
+document.addEventListener('click', function(event) {
+    if (!datalist.contains(event.target)) {
+        closeSuggest();
+    }
+});
+input.addEventListener('keyup', debounce(searchRepos.bind(this), 1000));
 input.addEventListener('keydown', (event) => {
     if(event.keyCode === 46 || event.keyCode === 8) {
         closeSuggest();
@@ -74,6 +79,7 @@ function createItem(tagName, className) {
 
 async function searchRepos() {
     if(input.value) {
+        createLoader()
         let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`);
         let reposList = await response.json();
         closeSuggest();
@@ -99,6 +105,10 @@ function updateLike() {
     likeData.forEach(repo => {
         renderLike(repo);
     })
+}
+
+function createLoader() {
+    datalist.innerHTML = `<span class="loader"></span>`;
 }
 
 updateLike();
