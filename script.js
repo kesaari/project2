@@ -2,20 +2,15 @@ let input = document.querySelector(".input");
 let datalist = document.querySelector('.suggest_cont');
 let like = document.querySelector('.like');
 let likeData = JSON.parse(localStorage.getItem('like')) || [];
-let body = document.getElementsByTagName('body')
+let controller;
 
 function updateLike() {
-    
     likeData.forEach(repo => {
         renderLike(repo);
     })
 }
 
 function createLoader() {
-    datalist.innerHTML = `<span class="loader"></span>`;
-}
-
-function notFound() {
     datalist.innerHTML = `<span class="loader"></span>`;
 }
 
@@ -32,15 +27,6 @@ const debounce = (fn, delay) => {
     };
   };
 
-function fixToLike(element) {
-    // element.addEventListener('click', function () {
-    //     let likeCard = createItem('div', 'like_card');
-    //     likeCard.textContent = element.textContent;
-    //     like.append(likeCard);
-    //     closeSuggest();
-// );};
-}
-
 function fixToLike(repo) {
     if (!likeData.find(el => el.id === repo.id)) {
         likeData.push(repo);
@@ -48,7 +34,6 @@ function fixToLike(repo) {
         renderLike(repo);
         closeSuggest();
     }
-console.log(localStorage);
 }
 
 function deleteLike(repo, card) {
@@ -56,35 +41,59 @@ function deleteLike(repo, card) {
     localStorage.setItem('like', JSON.stringify(likeData));
     let deleteItem = card;
     deleteItem.remove();
-    console.log(deleteItem);
 }
+
 document.addEventListener('click', function(event) {
     if (!datalist.contains(event.target)) {
         closeSuggest();
     }
 });
-input.addEventListener('keyup', debounce(searchRepos.bind(this), 1000));
-input.addEventListener('keydown', (event) => {
-    if(event.keyCode === 46 || event.keyCode === 8) {
-        closeSuggest();
-    }
-});
+
+// input.addEventListener('keyup', debounce(searchRepos.bind(this), 500));
+    
+
+// input.addEventListener('keydown', (event) => {
+//     if(event.keyCode === 46 || event.keyCode === 8) {
+//         closeSuggest();
+//     }
+// });
+
+// function createSuggest(repos) {
+//     repos.forEach(repo => {
+
+//         let suggest_item = document.createElement('div');
+//         suggest_item.textContent = `${repo.name}`;
+//         suggest_item.classList.add('suggest_item');
+//         let likeBtn = createItem('button', 'like_btn');
+//         suggest_item.append(likeBtn);
+//         datalist.append(suggest_item);
+//         likeBtn.onclick = function() {
+//             fixToLike(repo)
+//         }
+//         suggest_item.onclick = function() {
+//             fixToLike(repo)
+//         }
+//     })
+// }
 
 function createSuggest(repos) {
     repos.forEach(repo => {
-
-        let suggest_item = document.createElement('div');
-        suggest_item.textContent = `${repo.name}`;
-        suggest_item.classList.add('suggest_item');
+        let suggest_item = createItem('div', 'suggest_item');
         let likeBtn = createItem('button', 'like_btn');
+        let suggest_info = createItem('div', 'title');
+        suggest_info.textContent = `${repo.name}`;
+        suggest_item.append(suggest_info);
         suggest_item.append(likeBtn);
         datalist.append(suggest_item);
+
         likeBtn.onclick = function() {
+            fixToLike(repo)
+        }
+        suggest_item.onclick = function() {
             fixToLike(repo)
         }
     })
 }
-
 
 function createItem(tagName, className) {
     let item = document.createElement(tagName);
@@ -93,19 +102,70 @@ function createItem(tagName, className) {
 }
 
 async function searchRepos() {
-    if(input.value) {
         createLoader()
-        let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`);
+        let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`, { signal: controller.signal });
         let reposList = await response.json();
         closeSuggest();
         createSuggest(reposList.items);
         if (reposList.items.length === 0) {
             datalist.innerHTML = `<div>Ничего не нашлось</div>`
         }
+}
+
+// async function searchRepos() {
+//     if (input.value) {
+//         if (controller) {
+//             controller.abort();
+//         }
+//         controller = new AbortController();
+//         const signal = controller.signal;
+//         createLoader();
+//         try {
+//             let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`, { signal });
+//             if (!response.ok) {
+//                 throw new Error('Слишком много запросов');
+//             }
+//             let reposList = await response.json();
+//             closeSuggest();
+//             createSuggest(reposList.items);
+//             if (reposList.items.length === 0) {
+//                 datalist.innerHTML = `<div>Ничего не нашлось</div>`;
+//             }
+//         } catch (error) {
+//             if (error.name === 'AbortError') {
+//                 console.log('Запрос прерван');
+//             } else {
+//                 console.error('Fetch error:', error);
+//             }
+//         }
+//     } else {
+//         closeSuggest();
+//     }
+// }
+
+input.addEventListener('keyup', function() {
+    if (controller) {
+        controller.abort(); /// otmena esli yje est
+    }
+    if (input.value) {
+        controller = new AbortController(); // novii controller
+        debounce(searchRepos(), 500);
     } else {
         closeSuggest();
     }
-}
+});
+
+// function abortSearch() {
+//     if (controller) {
+//         controller.abort(); /// otmena esli yje est
+//     }
+//     if (input.value) {
+//         controller = new AbortController(); // novii controller
+//         debounce(searchRepos(), 500);
+//     } else {
+//         closeSuggest();
+//     }
+// }
 
 function renderLike(repo) {
     let likeCard = createItem('div', 'like_card');
@@ -118,4 +178,4 @@ function renderLike(repo) {
         like.append(likeCard);
 }
 
-updateLike();
+updateLike()

@@ -97,10 +97,11 @@ datalist {
     background-color: rgb(151, 142, 140);
     border-radius: 20px;
     cursor: pointer;
+    width: 100%;
 }
 
 .like_card {
-    width: 200px;
+    width: 250px;
     background-color: rgba(252, 219, 214, 1);
     border-radius: 20px;
     padding-left: 20px;
@@ -138,7 +139,7 @@ datalist {
 
 .delete_btn {
     position: absolute;
-    transform: translateX(155px) translateY(-35px);
+    transform: translateX(205px) translateY(-35px);
     background: url('../project2/close.png') no-repeat center ;
     height: 15px;
     width: 15px;
@@ -192,3 +193,10 @@ datalist {
       transform: rotate(360deg);
     }
   } 
+
+  .title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
