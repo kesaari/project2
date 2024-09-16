@@ -143,12 +143,12 @@ async function searchRepos() {
 //     }
 // }
 
-input.addEventListener('keyup', function() {
+input.addEventListener('input', function() {
     if (controller) {
-        controller.abort(); /// otmena esli yje est
+        controller.abort();
     }
     if (input.value) {
-        controller = new AbortController(); // novii controller
+        controller = new AbortController();
         debounce(searchRepos(), 500);
     } else {
         closeSuggest();
