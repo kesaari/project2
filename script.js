@@ -32,7 +32,7 @@ function fixToLike(repo) {
         likeData.push(repo);
         localStorage.setItem('like', JSON.stringify(likeData));
         renderLike(repo);
-        closeSuggest();
+        // closeSuggest();
     }
 }
 
@@ -43,38 +43,11 @@ function deleteLike(repo, card) {
     deleteItem.remove();
 }
 
-document.addEventListener('click', function(event) {
-    if (!datalist.contains(event.target)) {
-        closeSuggest();
-    }
-});
-
-// input.addEventListener('keyup', debounce(searchRepos.bind(this), 500));
-    
-
-// input.addEventListener('keydown', (event) => {
-//     if(event.keyCode === 46 || event.keyCode === 8) {
-//         closeSuggest();
+// document.addEventListener('click', function(event) {
+//     if (!datalist.contains(event.target)) {
+//         datalist.classList.toggle('display_none');
 //     }
 // });
-
-// function createSuggest(repos) {
-//     repos.forEach(repo => {
-
-//         let suggest_item = document.createElement('div');
-//         suggest_item.textContent = `${repo.name}`;
-//         suggest_item.classList.add('suggest_item');
-//         let likeBtn = createItem('button', 'like_btn');
-//         suggest_item.append(likeBtn);
-//         datalist.append(suggest_item);
-//         likeBtn.onclick = function() {
-//             fixToLike(repo)
-//         }
-//         suggest_item.onclick = function() {
-//             fixToLike(repo)
-//         }
-//     })
-// }
 
 function createSuggest(repos) {
     repos.forEach(repo => {
@@ -101,71 +74,33 @@ function createItem(tagName, className) {
     return item
 }
 
-async function searchRepos() {
-        createLoader()
-        let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`, { signal: controller.signal });
-        let reposList = await response.json();
-        closeSuggest();
-        createSuggest(reposList.items);
-        if (reposList.items.length === 0) {
-            datalist.innerHTML = `<div>Ничего не нашлось</div>`
-        }
-}
+let debouncedSearch = debounce(searchRepos, 500);
 
-// async function searchRepos() {
-//     if (input.value) {
-//         if (controller) {
-//             controller.abort();
-//         }
-//         controller = new AbortController();
-//         const signal = controller.signal;
-//         createLoader();
-//         try {
-//             let response = await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`, { signal });
-//             if (!response.ok) {
-//                 throw new Error('Слишком много запросов');
-//             }
-//             let reposList = await response.json();
-//             closeSuggest();
-//             createSuggest(reposList.items);
-//             if (reposList.items.length === 0) {
-//                 datalist.innerHTML = `<div>Ничего не нашлось</div>`;
-//             }
-//         } catch (error) {
-//             if (error.name === 'AbortError') {
-//                 console.log('Запрос прерван');
-//             } else {
-//                 console.error('Fetch error:', error);
-//             }
-//         }
-//     } else {
-//         closeSuggest();
-//     }
-// }
+async function searchRepos(value) {
+    if (value) {
 
-input.addEventListener('input', function() {
-    if (controller) {
-        controller.abort();
-    }
-    if (input.value) {
-        controller = new AbortController();
-        debounce(searchRepos(), 500);
+        if (controller) controller.abort();
+            
+            controller = new AbortController();
+            createLoader();
+            let response = await fetch(`https://api.github.com/search/repositories?q=${value}&per_page=5`, { signal: controller.signal });
+            let reposList = await response.json();
+            closeSuggest();
+            createSuggest(reposList.items);
+            if (reposList.items.length === 0) {
+                datalist.innerHTML = `<div>Ничего не нашлось</div>`
+            }
     } else {
         closeSuggest();
     }
+}
+
+
+input.addEventListener('input', function(e) {
+   let value = e.target.value;
+   debouncedSearch(value)
 });
 
-// function abortSearch() {
-//     if (controller) {
-//         controller.abort(); /// otmena esli yje est
-//     }
-//     if (input.value) {
-//         controller = new AbortController(); // novii controller
-//         debounce(searchRepos(), 500);
-//     } else {
-//         closeSuggest();
-//     }
-// }
 
 function renderLike(repo) {
     let likeCard = createItem('div', 'like_card');

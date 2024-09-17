@@ -147,7 +147,9 @@ datalist {
 }
 
 
-
+.display_none {
+    display: none;
+}
 
 
 
